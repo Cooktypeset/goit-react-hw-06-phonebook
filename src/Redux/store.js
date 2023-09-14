@@ -17,3 +17,20 @@ const persistConfig = {
   key: 'root',
   storage,
 };
+
+const persistedReducer = persistReducer(persistConfig, ContactsSliceReduser);
+
+export const store = configureStore({
+  reducer: {
+    contacts: persistedReducer,
+    filter: FilterReduser,
+  },
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoreActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+});
+
+export const persistor = persistStore(store);

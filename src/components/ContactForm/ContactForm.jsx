@@ -11,25 +11,6 @@ export const ContactForm = () => {
   const dispatch = useDispatch();
   const contacts = useSelector(getContacts);
   
- 
-
-  const handleChange = event => {
-    const target = event.currentTarget.name;
-    switch (target) {
-      case 'name':
-        setName(event.currentTarget.value);
-        break;
-
-      case 'number':
-        setNumber(event.currentTarget.value);
-        break;
-
-      default:
-        console.log('Something wrong');
-        break;
-    }
-  };
-
   // const handleSubmit = event => {
   //   event.preventDefault();
 
@@ -41,10 +22,34 @@ export const ContactForm = () => {
   //   setName('');
   //   setNumber('');
   // };
+ const handleSubmit = event => {
+    event.preventDefault();
+    const newContact = {};
 
+    if (event.currentTarget.name)
+      newContact.name = event.currentTarget.name.value;
+    if (event.currentTarget.number)
+      newContact.number = event.currentTarget.number.value;
+
+    const checkList = contacts.find(contact => {
+      return (
+        contact.name.toLowerCase() === newContact.name.toLowerCase() ||
+        contact.number === newContact.number
+      );
+    });
+    if (checkList) {
+      alert(
+        `${newContact.name}, number: ${newContact.number} is already in contacts !`
+      );
+      event.currentTarget.reset();
+      return;
+    }
+    dispatch(addContact(newContact.name, newContact.number));
+    event.currentTarget.reset();
+  };
 
     return(
-     <form  className={css.form}>
+     <form  className={css.form}  onSubmit={handleSubmit}>
         <label className={css.subTitle}>
           Name
           <input
@@ -55,8 +60,8 @@ export const ContactForm = () => {
             title="Name may contain only letters, apostrophe, dash and spaces. 
           For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
             placeholder="Enter name"
-            value={name}
-            onChange={handleChange}
+            // value={name}
+            // onChange={handleChange}
           />
         </label>
 
@@ -69,8 +74,8 @@ export const ContactForm = () => {
             pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
             placeholder="Enter your number"
-            value={number}
-                onChange={handleChange}
+            // value={number}
+                // onChange={handleChange}
              required
           />
         </label>
