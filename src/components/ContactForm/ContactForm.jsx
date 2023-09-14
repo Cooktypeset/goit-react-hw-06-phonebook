@@ -1,10 +1,17 @@
-import { useState } from "react";
-import PropTypes from "prop-types";
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { addContact } from '../../Redux/ContactsSlice/ContactsSlice';
+import { getContacts } from '../../Redux/selectors';
+
 import css from "./ContactForm.module.css";
 
-export const ContactForm = ({ onSubmit }) => {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+export const ContactForm = () => {
+  // const [name, setName] = useState('');
+  // const [number, setNumber] = useState('');
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+  
+ 
 
   const handleChange = event => {
     const target = event.currentTarget.name;
@@ -23,21 +30,21 @@ export const ContactForm = ({ onSubmit }) => {
     }
   };
 
-  const handleSubmit = event => {
-    event.preventDefault();
+  // const handleSubmit = event => {
+  //   event.preventDefault();
 
-    onSubmit({ name: name, number: number });
-    reset();
-  };
+  //   // onSubmit({ name: name, number: number });
+  //   // reset();
+  // };
 
-  const reset = () => {
-    setName('');
-    setNumber('');
-  };
+  // const reset = () => {
+  //   setName('');
+  //   setNumber('');
+  // };
 
 
     return(
-     <form onSubmit={handleSubmit} className={css.form}>
+     <form  className={css.form}>
         <label className={css.subTitle}>
           Name
           <input
@@ -76,6 +83,6 @@ export const ContactForm = ({ onSubmit }) => {
   }
 
 
-ContactForm.propTypes = {
-    onSubmit: PropTypes.func.isRequired,
-};
+// ContactForm.propTypes = {
+//     onSubmit: PropTypes.func.isRequired,
+// };
